@@ -1,0 +1,189 @@
+openapi: 3.0.0
+info:
+  version: '1.0.0'
+  title: 'Reservations'
+  description: 'Reservation service to CRUD reservations'
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/bilygine/booking_api/1.0.0
+paths:
+  /reservation:
+    post:
+      summary: create a new reservation
+      operationId: api.v1.reservation.post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: object
+              required: 
+                - rooms
+                - date_start
+              properties: 
+                rooms: 
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                    example: '16bbcd13d4db4161b80a2a7e27829ee9'
+                date_start: 
+                  type: string
+                  format: date
+                  example: '2019-08-01'
+                date_end:
+                  type: string
+                  format: date
+                  example: '2019-08-03'
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyReponse'
+        '304':
+          description: not successful
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyReponse'
+    get:
+      summary: list all reservations
+      operationId: api.v1.reservation.get
+      parameters: 
+        - in: query
+          name: date_start
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_end
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: list all reservation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reservation'
+  /reservation/{reservation_id}:
+    put:
+      summary: update reservation
+      operationId: api.v1.reservation.put
+      parameters:
+        - in: path
+          required: true
+          name: reservation_id
+          schema:
+            type: string
+            example: 'a6ea2a9a251442f18d8d2c2689efcc0e'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reservation'
+      responses:
+        '202':
+          description: accepted
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyReponse'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyReponse'
+    delete:
+      summary: delete a reservation
+      operationId: api.v1.reservation.delete
+      parameters:
+        - in: path
+          required: true
+          name: reservation_id
+          schema:
+            type: string
+            example: 'a6ea2a9a251442f18d8d2c2689efcc0e'
+      responses:
+        '202':
+          description: accepted
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyReponse'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyReponse'
+components:
+  schemas:
+    MyReponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: created
+        id:
+          type: string
+          format: uuid
+          example: 'a6ea2a9a251442f18d8d2c2689efcc0e'
+    Reservation: 
+      type: object
+      required: 
+        - id
+      properties: 
+        id:
+          type: string
+          format: uuid
+          example: '16bbcd13d4db4161b80a2a7e27829ee9'
+        hotel_name:
+          type: string
+          example: 'hotel1'
+        user_id:
+          type: string
+          format: uuid
+          example: '18b9057c088145e1bb146817d067354c'
+        date_start: 
+          type: string
+          format: date
+          example: '2019-09-10'
+        date_end:
+          type: string
+          format: date
+          example: '2019-09-12'
+        price:
+          type: number
+          format: float
+          example: 20
+        more_services:
+          type: object
+          properties:
+            garage:
+              type: boolean
+              example: true
+            baby_bed:
+              type: boolean
+              example: false
+            breakfast: 
+              type: boolean
+              example: true
+            couple_combo:
+              type: boolean
+              example: false
+        room_id: 
+          type: string
+          format: uuid
+          example: 'a6ea2a9a251442f18d8d2c2689efcc0e'
